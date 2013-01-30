@@ -8,13 +8,30 @@
 
 #import "AppDelegate.h"
 
+#import "UBSlidingPanelController.h"
+#import "LeftVC.h"
+#import "RightVC.h"
+#import "CenterVC.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+	
+	self.viewController = [[UBSlidingPanelController alloc] init];
+    self.viewController.shouldDelegateAutorotateToVisiblePanel = NO;
+    
+	self.viewController.leftPanel = [[LeftVC alloc] init];
+	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
+	self.viewController.rightPanel = [[RightVC alloc] init];
+	
+    self.viewController.leftFixedWidth = 256;
+    self.viewController.rightFixedWidth = 256;
+    self.viewController.allowLeftOverpan = NO;
+    self.viewController.allowRightOverpan = NO;
+    
+	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;
 }
