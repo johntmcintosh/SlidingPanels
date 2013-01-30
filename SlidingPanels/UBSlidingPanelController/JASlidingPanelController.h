@@ -45,7 +45,7 @@ typedef enum _JASidePanelState {
     JASidePanelRightVisible
 } JASidePanelState;
 
-@interface UBSlidingPanelController : UIViewController <UIGestureRecognizerDelegate>
+@interface JASlidingPanelController : UIViewController <UIGestureRecognizerDelegate>
 
 #pragma mark - Usage
 

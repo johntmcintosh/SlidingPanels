@@ -31,12 +31,12 @@
 //  Copyright (c) 2013 John Mcintosh . All rights reserved.
 //
 
-#import "UBSlidingPanelController.h"
+#import "JASlidingPanelController.h"
 #import <QuartzCore/QuartzCore.h>
 
 static char ja_kvoContext;
 
-@interface UBSlidingPanelController () {
+@interface JASlidingPanelController () {
 CGRect _centerPanelRestingFrame;
 CGPoint _locationBeforePan;
 }
@@ -52,7 +52,7 @@ CGPoint _locationBeforePan;
 
 @end
 
-@implementation UBSlidingPanelController
+@implementation JASlidingPanelController
 
 #pragma mark - Icon
 
@@ -148,6 +148,9 @@ CGPoint _locationBeforePan;
     [self _layoutSidePanels];
     self.centerPanelContainer.frame = [self _adjustCenterFrame];
     [self styleContainer:self.centerPanelContainer animate:NO duration:0.0f];
+    
+    [self showLeftPanel:NO];
+    [self showRightPanel:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -254,6 +257,11 @@ CGPoint _locationBeforePan;
 }
 
 - (void)_layoutSideContainers:(BOOL)animate duration:(NSTimeInterval)duration {
+    
+    
+//    CGRect leftFrame = CGRectIntegral(CGRectMake(0, 0, CGRectGetWidth(self.view.bounds)/2, CGRectGetHeight(self.view.bounds)));
+//    CGRect rightFrame = CGRectIntegral(CGRectMake(CGRectGetWidth(self.view.bounds)/2, 0, CGRectGetWidth(self.view.bounds)/2, CGRectGetHeight(self.view.bounds)));
+    
     CGRect leftFrame = self.view.bounds;
     CGRect rightFrame = self.view.bounds;
 

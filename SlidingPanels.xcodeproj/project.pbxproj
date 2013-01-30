@@ -16,7 +16,7 @@
 		E59A058416B9B5E800614619 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E59A058316B9B5E800614619 /* Default.png */; };
 		E59A058616B9B5E800614619 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E59A058516B9B5E800614619 /* Default@2x.png */; };
 		E59A058816B9B5E800614619 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E59A058716B9B5E800614619 /* Default-568h@2x.png */; };
-		E59A059316B9B79300614619 /* UBSlidingPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A059216B9B79300614619 /* UBSlidingPanelController.m */; };
+		E59A059316B9B79300614619 /* JASlidingPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A059216B9B79300614619 /* JASlidingPanelController.m */; };
 		E59A059816B9B7D500614619 /* LeftVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A059616B9B7D500614619 /* LeftVC.m */; };
 		E59A059D16B9B7E500614619 /* RightVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A059B16B9B7E500614619 /* RightVC.m */; };
 		E59A05A216B9B7F000614619 /* CenterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A05A016B9B7EF00614619 /* CenterVC.m */; };
@@ -37,8 +37,8 @@
 		E59A058316B9B5E800614619 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E59A058516B9B5E800614619 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E59A058716B9B5E800614619 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		E59A059116B9B79300614619 /* UBSlidingPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UBSlidingPanelController.h; sourceTree = "<group>"; };
-		E59A059216B9B79300614619 /* UBSlidingPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBSlidingPanelController.m; sourceTree = "<group>"; };
+		E59A059116B9B79300614619 /* JASlidingPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASlidingPanelController.h; sourceTree = "<group>"; };
+		E59A059216B9B79300614619 /* JASlidingPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASlidingPanelController.m; sourceTree = "<group>"; };
 		E59A059516B9B7D500614619 /* LeftVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftVC.h; sourceTree = "<group>"; };
 		E59A059616B9B7D500614619 /* LeftVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftVC.m; sourceTree = "<group>"; };
 		E59A059A16B9B7E500614619 /* RightVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightVC.h; sourceTree = "<group>"; };
@@ -120,8 +120,8 @@
 		E59A059016B9B78400614619 /* UBSlidingPanelController */ = {
 			isa = PBXGroup;
 			children = (
-				E59A059116B9B79300614619 /* UBSlidingPanelController.h */,
-				E59A059216B9B79300614619 /* UBSlidingPanelController.m */,
+				E59A059116B9B79300614619 /* JASlidingPanelController.h */,
+				E59A059216B9B79300614619 /* JASlidingPanelController.m */,
 			);
 			path = UBSlidingPanelController;
 			sourceTree = "<group>";
@@ -206,7 +206,7 @@
 			files = (
 				E59A057E16B9B5E800614619 /* main.m in Sources */,
 				E59A058216B9B5E800614619 /* AppDelegate.m in Sources */,
-				E59A059316B9B79300614619 /* UBSlidingPanelController.m in Sources */,
+				E59A059316B9B79300614619 /* JASlidingPanelController.m in Sources */,
 				E59A059816B9B7D500614619 /* LeftVC.m in Sources */,
 				E59A059D16B9B7E500614619 /* RightVC.m in Sources */,
 				E59A05A216B9B7F000614619 /* CenterVC.m in Sources */,

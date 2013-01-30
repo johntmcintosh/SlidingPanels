@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class UBSlidingPanelController;
+@class JASlidingPanelController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) UBSlidingPanelController *viewController;
+@property (strong, nonatomic) JASlidingPanelController *viewController;
 
 @end

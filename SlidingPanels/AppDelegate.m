@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import "UBSlidingPanelController.h"
+#import "JASlidingPanelController.h"
 #import "LeftVC.h"
 #import "RightVC.h"
 #import "CenterVC.h"
@@ -19,7 +19,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
-	self.viewController = [[UBSlidingPanelController alloc] init];
+	self.viewController = [[JASlidingPanelController alloc] init];
     self.viewController.shouldDelegateAutorotateToVisiblePanel = NO;
     
 	self.viewController.leftPanel = [[LeftVC alloc] init];
@@ -28,8 +28,8 @@
 	
     self.viewController.leftFixedWidth = 256;
     self.viewController.rightFixedWidth = 256;
-    self.viewController.allowLeftOverpan = NO;
-    self.viewController.allowRightOverpan = NO;
+//    self.viewController.allowLeftOverpan = NO;
+//    self.viewController.allowRightOverpan = NO;
     
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
