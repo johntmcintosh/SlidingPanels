@@ -12,6 +12,7 @@
 #import "LeftVC.h"
 #import "RightVC.h"
 #import "CenterVC.h"
+#import "ScrollVC.h"
 
 @implementation AppDelegate
 
@@ -22,7 +23,9 @@
 	self.viewController = [[UBSlidingPanelController alloc] init];
     
 	self.viewController.leftPanel = [[LeftVC alloc] init];
-	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
+//	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
+	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[UITableViewController alloc] initWithStyle:UITableViewStylePlain]];
+//	self.viewController.centerPanel = [[ScrollVC alloc] init];
 	self.viewController.rightPanel = [[RightVC alloc] init];
 	   
 	self.window.rootViewController = self.viewController;

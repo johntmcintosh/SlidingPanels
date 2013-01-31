@@ -48,4 +48,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+//
+// touchesBegan: withEvent:
+//
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"TOUCHES BEGAN in VC");
+    [super touchesBegan:touches withEvent:event];
+}
+
+
 @end

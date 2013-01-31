@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E50A77C116BB0C0B00185E99 /* ScrollVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E50A77C016BB0C0B00185E99 /* ScrollVC.m */; };
 		E59A057216B9B5E800614619 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057116B9B5E800614619 /* UIKit.framework */; };
 		E59A057416B9B5E800614619 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057316B9B5E800614619 /* Foundation.framework */; };
 		E59A057616B9B5E800614619 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057516B9B5E800614619 /* CoreGraphics.framework */; };
@@ -25,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E50A77BF16BB0C0B00185E99 /* ScrollVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollVC.h; sourceTree = "<group>"; };
+		E50A77C016BB0C0B00185E99 /* ScrollVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollVC.m; sourceTree = "<group>"; };
 		E59A056E16B9B5E800614619 /* SlidingPanels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlidingPanels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E59A057116B9B5E800614619 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E59A057316B9B5E800614619 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -140,6 +143,8 @@
 				E59A059B16B9B7E500614619 /* RightVC.m */,
 				E59A059F16B9B7EF00614619 /* CenterVC.h */,
 				E59A05A016B9B7EF00614619 /* CenterVC.m */,
+				E50A77BF16BB0C0B00185E99 /* ScrollVC.h */,
+				E50A77C016BB0C0B00185E99 /* ScrollVC.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -216,6 +221,7 @@
 				E59A059D16B9B7E500614619 /* RightVC.m in Sources */,
 				E59A05A216B9B7F000614619 /* CenterVC.m in Sources */,
 				E59A05A816B9C4F700614619 /* UBSlidingPanelController.m in Sources */,
+				E50A77C116BB0C0B00185E99 /* ScrollVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +338,7 @@
 				E59A058D16B9B5E800614619 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

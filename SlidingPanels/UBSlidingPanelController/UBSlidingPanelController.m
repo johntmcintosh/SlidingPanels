@@ -16,6 +16,7 @@
 @property(nonatomic, assign) BOOL allowLeftOverpan;
 @property(nonatomic, assign) CGPoint dragTouchStart;
 @property(nonatomic, assign) BOOL centerPanelIsDragging;
+@property(nonatomic, assign) CGPoint initialCenterPanelOrigin;
 
 // the minimum % of total screen width the centerPanel.view must move for panGesture to succeed
 @property (nonatomic) CGFloat minimumMovePercentage;
@@ -102,6 +103,7 @@ static char kvoContext;
     
     // Gestures
     [self _addTapGestureToView:self.centerPanelContainer];
+    [self addPanGestureToView:self.centerPanelContainer];
 }
 
 //
@@ -329,16 +331,81 @@ static char kvoContext;
     self.state = nextState;
 }
 
+//
+// addPanGestureToView:
+//
+- (void)addPanGestureToView:(UIView *)view
+{
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    panGesture.delegate = self;
+    panGesture.maximumNumberOfTouches = 1;
+    panGesture.minimumNumberOfTouches = 1;
+    [view addGestureRecognizer:panGesture];
+}
+
+//
+// handlePan:
+//
+- (void)handlePan:(UIPanGestureRecognizer *)panRecognizer
+{
+    // If pan beginning, record initial state
+    if ( UIGestureRecognizerStateBegan == panRecognizer.state ) {        
+        self.initialCenterPanelOrigin = self.centerPanelContainer.frame.origin;
+    }
+
+    // Get the total movement since start of gesture
+    CGPoint point = [panRecognizer translationInView:self.centerPanelContainer];
+    CGFloat xTotalMovement = point.x;
+    
+    // Compute constraints
+    CGFloat maxOriginX = kSidePanelWidth;
+    CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainer.frame) - kSidePanelWidth;
+    
+    CGFloat xMovementSinceStarted = xTotalMovement;
+    CGFloat newOriginX = self.initialCenterPanelOrigin.x + xMovementSinceStarted;
+    
+    // Constraints
+    // Let's compute how far the drag is beyond the sidebar size. Then, we'll multiple that distance
+    // by a spring constant to give an elasticity to the drag that's beyond the boundary
+    CGFloat springValue = 0.05f;
+    CGFloat constrainedNewOriginX = newOriginX;
+    if ( constrainedNewOriginX > maxOriginX ) {
+        CGFloat amountBeyondMax = newOriginX - maxOriginX;
+        constrainedNewOriginX = maxOriginX + (springValue*amountBeyondMax);
+    }
+    else if ( constrainedNewOriginX < minOriginX ) {
+        CGFloat amountBeforeMin = minOriginX - newOriginX;
+        constrainedNewOriginX = minOriginX - (springValue*amountBeforeMin);
+    }
+    
+    // Update the frame
+    CGRect frame = self.centerPanelContainer.frame;
+    frame.origin.x = constrainedNewOriginX;
+    self.centerPanelContainer.frame = frame;
+
+    
+    // Check for ending states.
+    // If just ended, compute new target position and animate there
+    if ( UIGestureRecognizerStateEnded == panRecognizer.state ) {
+        [self positionCenterContainerForState:[self targetStateForCenterPanel] animated:YES];
+    }
+    // If cancelled, reset position to original state
+    else if (UIGestureRecognizerStateCancelled == panRecognizer.state ) {
+        [self positionCenterContainerForState:self.state animated:YES];
+    }
+}
 
 #pragma mark - Manual Touch Handling
 
+/*
 //
 // touchesBegan: withEvent:
 //
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSLog(@"TOUCHES BEGAN in CONTAINER");
     [super touchesBegan:touches withEvent:event];
-    
+
     UITouch *touch = touches.anyObject;
     CGPoint point = [touch locationInView:self.centerPanelContainer];
     
@@ -410,6 +477,7 @@ static char kvoContext;
     }
     [super touchesEnded:touches withEvent:event];
 }
+*/
 
 //
 // targetStateForCenterPanel
