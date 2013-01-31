@@ -31,7 +31,7 @@
 //    CGFloat green = (CGFloat)arc4random() / 0x100000000;
 //    CGFloat blue = (CGFloat)arc4random() / 0x100000000;
 //    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
-    self.view.backgroundColor = [UIColor darkTextColor];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     
     UILabel *label  = [[UILabel alloc] init];
     label.font = [UIFont boldSystemFontOfSize:20.0f];
