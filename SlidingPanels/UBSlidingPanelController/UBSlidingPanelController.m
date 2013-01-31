@@ -7,6 +7,8 @@
 //
 
 #import "UBSlidingPanelController.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 @interface UBSlidingPanelController ()
 @property(nonatomic, assign) CGPoint locationBeforePan;
@@ -89,12 +91,15 @@ static char kvoContext;
     [self _addChildVC:self.rightPanel intoView:self.rightPanelContainer];
     [self _addChildVC:self.centerPanel intoView:self.centerPanelContainer];
     
+    // Style
+    [self styleContainer:self.centerPanelContainer];
+    [self stylePanel:self.centerPanel.view];
+    
     // Layout
     [self positionCenterContainerForState:self.state animated:NO];
     
     // Gestures
     [self _addTapGestureToView:self.centerPanelContainer];
-//    [self _addPanGestureToView:self.centerPanelContainer];
 }
 
 //
@@ -125,8 +130,8 @@ static char kvoContext;
 //
 - (void)configureContainers
 {
-    self.leftPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    self.rightPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.leftPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+    self.rightPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
     self.centerPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 }
 
@@ -161,6 +166,9 @@ static char kvoContext;
 
 #pragma mark - Panels
 
+//
+// setCenterPanel:
+//
 - (void)setCenterPanel:(UIViewController *)centerPanel {
 
     if (centerPanel != _centerPanel) {
@@ -176,10 +184,14 @@ static char kvoContext;
         if (centerPanel) {
             [self _addChildVC:centerPanel intoView:self.centerPanelContainer];
         }
+        
     }
 }
 
 
+//
+// setLeftPanel:
+//
 - (void)setLeftPanel:(UIViewController *)leftPanel {
     if (leftPanel != _leftPanel) {
         [self _removeChildVC:_leftPanel];
@@ -190,6 +202,9 @@ static char kvoContext;
     }
 }
 
+//
+// setRightPanel:
+//
 - (void)setRightPanel:(UIViewController *)rightPanel {
     if (rightPanel != _rightPanel) {
         [self _removeChildVC:_rightPanel];
@@ -200,8 +215,37 @@ static char kvoContext;
     }
 }
 
+
+#pragma mark - Style
+
+//
+// styleContainer:
+//
+- (void)styleContainer:(UIView *)container
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:container.bounds cornerRadius:0.0f];
+    container.layer.shadowPath = shadowPath.CGPath;
+    container.layer.shadowColor = [UIColor blackColor].CGColor;
+    container.layer.shadowRadius = 10.0f;
+    container.layer.shadowOpacity = 0.75f;
+    container.clipsToBounds = NO;
+}
+
+//
+// stylePanel:
+//
+- (void)stylePanel:(UIView *)panel
+{
+    panel.layer.cornerRadius = 6.0f;
+    panel.clipsToBounds = YES;
+}
+
+
 #pragma mark - Private
 
+//
+// _removeChildVC:
+//
 - (void)_removeChildVC:(UIViewController *)vc
 {
     [vc willMoveToParentViewController:nil];
@@ -209,9 +253,13 @@ static char kvoContext;
     [vc removeFromParentViewController];
 }
 
+//
+// _addChildVC: intoView:
+//
 - (void)_addChildVC:(UIViewController *)vc intoView:(UIView *)targetView
 {
     [self addChildViewController:vc];
+    vc.view.frame = targetView.bounds;
     [targetView addSubview:vc.view];
     [vc didMoveToParentViewController:self];
 }
@@ -219,6 +267,9 @@ static char kvoContext;
 
 #pragma mark - Gesture Recognizer Delegate
 
+//
+// gestureRecognizerShouldBegin:
+//
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if ( [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] ) {
@@ -317,7 +368,7 @@ static char kvoContext;
         // Constraints
         // Let's compute how far the drag is beyond the sidebar size. Then, we'll multiple that distance
         // by a spring constant to give an elasticity to the drag that's beyond the boundary
-        CGFloat springValue = 0.1f;
+        CGFloat springValue = 0.05f;
         CGFloat constrainedNewOriginX = newOriginX;
         if ( constrainedNewOriginX > maxOriginX ) {
             CGFloat amountBeyondMax = newOriginX - maxOriginX;
@@ -388,135 +439,5 @@ static char kvoContext;
     }
 }
 
-#pragma mark - Pan Gestures
-
-/*
-//
-// _addPanGestureToView:
-//
-- (void)_addPanGestureToView:(UIView *)view
-{
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_handlePan:)];
-    panGesture.delegate = self;
-    panGesture.maximumNumberOfTouches = 1;
-    panGesture.minimumNumberOfTouches = 1;
-    [view addGestureRecognizer:panGesture];
-}
-
-
-//
-// _handlePan:
-//
-- (void)_handlePan:(UIGestureRecognizer *)sender
-{
-    if ([sender isKindOfClass:[UIPanGestureRecognizer class]]) {
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)sender;
-        
-        if (pan.state == UIGestureRecognizerStateBegan) {
-            _locationBeforePan = self.centerPanelContainer.frame.origin;
-        }
-        
-        CGPoint translate = [pan translationInView:self.centerPanelContainer];
-        CGRect frame = self.centerPanelContainer.frame;
-        frame.origin.x += [self _correctMovement:translate.x];
-        self.centerPanelContainer.frame = frame;
-        
-        if (sender.state == UIGestureRecognizerStateEnded) {
-            CGFloat deltaX =  frame.origin.x - _locationBeforePan.x;
-            if ([self _validateThreshold:deltaX]) {
-                [self _completePan:deltaX];
-            } else {
-                [self _undoPan];
-            }
-        } else if (sender.state == UIGestureRecognizerStateCancelled) {
-            [self _undoPan];
-        }
-    }
-}
-*/
-
-- (void)_completePan:(CGFloat)deltaX {
-    /*
-    switch (self.state) {
-        case JASidePanelCenterVisible: {
-            if (deltaX > 0.0f) {
-                [self _showLeftPanel:YES bounce:self.bounceOnSidePanelOpen];
-            } else {
-                [self _showRightPanel:YES bounce:self.bounceOnSidePanelOpen];
-            }
-            break;
-		}
-        case JASidePanelLeftVisible: {
-            [self _showCenterPanel:YES bounce:self.bounceOnSidePanelClose];
-            break;
-		}
-        case JASidePanelRightVisible: {
-            [self _showCenterPanel:YES bounce:self.bounceOnSidePanelClose];
-            break;
-		}
-    }
-     */
-}
-
-- (void)_undoPan {
-    /*
-    switch (self.state) {
-        case JASidePanelCenterVisible: {
-            [self _showCenterPanel:YES bounce:NO];
-            break;
-		}
-        case JASidePanelLeftVisible: {
-            [self _showLeftPanel:YES bounce:NO];
-            break;
-		}
-        case JASidePanelRightVisible: {
-            [self _showRightPanel:YES bounce:NO];
-		}
-    }
-     */
-}
-
-/*
-- (CGFloat)_correctMovement:(CGFloat)movement {
-    
-    CGRect _centerPanelRestingFrame = CGRectMake(0, 0, 768, CGRectGetHeight(self.view.bounds));
-    CGFloat position = _centerPanelRestingFrame.origin.x + movement;
-    if (self.state == UBSlidingPanelCenterOnly) {
-        if ((position > 0.0f && !self.leftPanel) || (position < 0.0f && !self.rightPanel)) {
-            return 0.0f;
-        }
-    } else if (self.state == UBSlidingPanelRightVisible && !self.allowRightOverpan) {
-        if ((position + _centerPanelRestingFrame.size.width) < (self.rightPanelContainer.frame.size.width - kSidePanelWidth)) {
-            return 0.0f;
-        } else if (position > self.rightPanelContainer.frame.origin.x) {
-            return self.rightPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x;
-        }
-    } else if (self.state == UBSlidingPanelLeftVisible  && !self.allowLeftOverpan) {
-        if (position > kSidePanelWidth) {
-            return 0.0f;
-        } else if (position < self.leftPanelContainer.frame.origin.x) {
-            return  self.leftPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x;
-        }
-    }
-
-    return movement;
-}
-
-- (BOOL)_validateThreshold:(CGFloat)movement {
-    CGFloat minimum = floorf(self.view.bounds.size.width * self.minimumMovePercentage);
-    switch (self.state) {
-        case UBSlidingPanelLeftVisible: {
-            return movement <= -minimum;
-		}
-        case UBSlidingPanelCenterOnly: {
-            return fabsf(movement) >= minimum;
-		}
-        case UBSlidingPanelRightVisible: {
-            return movement >= minimum;
-		}
-    }
-    return NO;
-}
-*/
 
 @end
