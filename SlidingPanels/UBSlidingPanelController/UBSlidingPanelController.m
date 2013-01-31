@@ -33,6 +33,8 @@
 
 static CGFloat kCenterPanelWidth = 768.0f;
 static CGFloat kSidePanelWidth = 1024.0f - 768.0f;
+static CGFloat kSidePanelPadding = 50.0f;
+
 static char kvoContext;
 
 @implementation UBSlidingPanelController
@@ -68,8 +70,8 @@ static char kvoContext;
     
     // Create container views
     self.centerPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCenterPanelWidth, CGRectGetHeight(self.view.bounds))];
-    self.leftPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSidePanelWidth, CGRectGetHeight(self.view.bounds))];
-    self.rightPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth, 0, kSidePanelWidth, CGRectGetHeight(self.view.bounds))];
+    self.leftPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
+    self.rightPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
     [self configureContainers];
     
     // Add as Subviews
@@ -148,7 +150,7 @@ static char kvoContext;
             centerFrame.origin.x = 0.0f;
             break;
         case UBSlidingPanelLeftVisible:
-            centerFrame.origin.x = CGRectGetWidth(self.leftPanelContainer.frame);
+            centerFrame.origin.x = kSidePanelWidth;
             break;
         case UBSlidingPanelRightVisible:
             centerFrame.origin.x = (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) ? 0.0f : -kSidePanelWidth;
