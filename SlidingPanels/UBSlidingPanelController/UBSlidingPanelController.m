@@ -10,6 +10,23 @@
 
 @interface UBSlidingPanelController ()
 @property(nonatomic, assign) CGPoint locationBeforePan;
+@property(nonatomic, assign) BOOL allowRightOverpan;
+@property(nonatomic, assign) BOOL allowLeftOverpan;
+@property(nonatomic, assign) CGPoint dragTouchStart;
+@property(nonatomic, assign) BOOL centerPanelIsDragging;
+
+// the minimum % of total screen width the centerPanel.view must move for panGesture to succeed
+@property (nonatomic) CGFloat minimumMovePercentage;
+
+// the maximum time panel opening/closing should take. Actual time may be less if panGesture has already moved the view.
+@property (nonatomic) CGFloat maximumAnimationDuration;
+
+// how long the bounce animation should take
+@property (nonatomic) CGFloat bounceDuration;
+
+// how far the view should bounce
+@property (nonatomic) CGFloat bouncePercentage;
+
 @end
 
 static CGFloat kCenterPanelWidth = 768.0f;
@@ -25,7 +42,15 @@ static char kvoContext;
         
         // State
         self.state = UBSlidingPanelLeftVisible;
+        self.allowRightOverpan = NO;
+        self.allowLeftOverpan = NO;
+        self.dragTouchStart = CGPointZero;
+        self.centerPanelIsDragging = NO;
         
+        self.minimumMovePercentage = 0.15f;
+        self.maximumAnimationDuration = 0.2f;
+        self.bounceDuration = 0.1f;
+        self.bouncePercentage = 0.075f;
     }
     return self;
 }
@@ -65,10 +90,11 @@ static char kvoContext;
     [self _addChildVC:self.centerPanel intoView:self.centerPanelContainer];
     
     // Layout
-    [self positionCenterContainerForState:self.state];
+    [self positionCenterContainerForState:self.state animated:NO];
     
     // Gestures
     [self _addTapGestureToView:self.centerPanelContainer];
+//    [self _addPanGestureToView:self.centerPanelContainer];
 }
 
 //
@@ -89,7 +115,7 @@ static char kvoContext;
 - (void)setState:(UBSlidingPanelState)state
 {
     _state = state;
-    [self positionCenterContainerForState:state];
+    [self positionCenterContainerForState:state animated:YES];
 }
 
 #pragma mark - Private
@@ -107,7 +133,7 @@ static char kvoContext;
 //
 // positionCenterContainerForState:
 //
-- (void)positionCenterContainerForState:(UBSlidingPanelState)state
+- (void)positionCenterContainerForState:(UBSlidingPanelState)state animated:(BOOL)animated
 {
     CGRect centerFrame = self.centerPanelContainer.frame;
     
@@ -126,7 +152,10 @@ static char kvoContext;
             break;
     }
     
-    self.centerPanelContainer.frame = centerFrame;
+    CGFloat duration = (animated) ? 0.25 : 0.0;
+    [UIView animateWithDuration:duration animations:^{
+        self.centerPanelContainer.frame = centerFrame;
+    }];
 }
 
 
@@ -248,10 +277,74 @@ static char kvoContext;
 }
 
 
+#pragma mark - Manual Touch Handling
+
+//
+// touchesBegan: withEvent:
+//
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self.centerPanelContainer];
+    
+    if ( CGRectContainsPoint(self.centerPanelContainer.bounds, point) ) {
+        self.centerPanelIsDragging = YES;
+        self.dragTouchStart = point;
+    }
+    else {
+        self.centerPanelIsDragging = NO;
+    }
+}
+
+//
+// touchesMoved: withEvent:
+//
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = touches.anyObject;
+    CGPoint pointInCenterPanel = [touch locationInView:self.centerPanelContainer];
+    
+    if ( self.centerPanelIsDragging) {
+    
+//        CGPoint touchInMainView = [touch locationInView:self.view];
+                
+        CGFloat maxOriginX = kSidePanelWidth;
+        CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainer.frame) - kSidePanelWidth;
+        
+        CGFloat xMovementSinceStarted = pointInCenterPanel.x - self.dragTouchStart.x;
+        CGFloat newOriginX = CGRectGetMinX(self.centerPanelContainer.frame) + xMovementSinceStarted;
+        
+        // Constraints
+        CGFloat constrainedNewOriginX = fminf(newOriginX, maxOriginX);
+        constrainedNewOriginX = fmaxf(constrainedNewOriginX, minOriginX);
+
+        // Update the frame
+        CGRect frame = self.centerPanelContainer.frame;
+        frame.origin.x = constrainedNewOriginX;
+        self.centerPanelContainer.frame = frame;
+
+        
+    }
+    else {
+        [super touchesMoved:touches withEvent:event];
+    }
+}
+
+//
+// touchesEnded: withEvent:
+//
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    self.dragTouchStart = CGPointZero;
+}
+
+
 #pragma mark - Pan Gestures
 
 /*
-
 //
 // _addPanGestureToView:
 //
@@ -294,8 +387,10 @@ static char kvoContext;
         }
     }
 }
+*/
 
 - (void)_completePan:(CGFloat)deltaX {
+    /*
     switch (self.state) {
         case JASidePanelCenterVisible: {
             if (deltaX > 0.0f) {
@@ -314,9 +409,11 @@ static char kvoContext;
             break;
 		}
     }
+     */
 }
 
 - (void)_undoPan {
+    /*
     switch (self.state) {
         case JASidePanelCenterVisible: {
             [self _showCenterPanel:YES bounce:NO];
@@ -330,40 +427,45 @@ static char kvoContext;
             [self _showRightPanel:YES bounce:NO];
 		}
     }
+     */
 }
 
+/*
 - (CGFloat)_correctMovement:(CGFloat)movement {
+    
+    CGRect _centerPanelRestingFrame = CGRectMake(0, 0, 768, CGRectGetHeight(self.view.bounds));
     CGFloat position = _centerPanelRestingFrame.origin.x + movement;
-    if (self.state == JASidePanelCenterVisible) {
+    if (self.state == UBSlidingPanelCenterOnly) {
         if ((position > 0.0f && !self.leftPanel) || (position < 0.0f && !self.rightPanel)) {
             return 0.0f;
         }
-    } else if (self.state == JASidePanelRightVisible && !self.allowRightOverpan) {
-        if ((position + _centerPanelRestingFrame.size.width) < (self.rightPanelContainer.frame.size.width - self.rightVisibleWidth)) {
+    } else if (self.state == UBSlidingPanelRightVisible && !self.allowRightOverpan) {
+        if ((position + _centerPanelRestingFrame.size.width) < (self.rightPanelContainer.frame.size.width - kSidePanelWidth)) {
             return 0.0f;
         } else if (position > self.rightPanelContainer.frame.origin.x) {
             return self.rightPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x;
         }
-    } else if (self.state == JASidePanelLeftVisible  && !self.allowLeftOverpan) {
-        if (position > self.leftVisibleWidth) {
+    } else if (self.state == UBSlidingPanelLeftVisible  && !self.allowLeftOverpan) {
+        if (position > kSidePanelWidth) {
             return 0.0f;
         } else if (position < self.leftPanelContainer.frame.origin.x) {
             return  self.leftPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x;
         }
     }
+
     return movement;
 }
 
 - (BOOL)_validateThreshold:(CGFloat)movement {
     CGFloat minimum = floorf(self.view.bounds.size.width * self.minimumMovePercentage);
     switch (self.state) {
-        case JASidePanelLeftVisible: {
+        case UBSlidingPanelLeftVisible: {
             return movement <= -minimum;
 		}
-        case JASidePanelCenterVisible: {
+        case UBSlidingPanelCenterOnly: {
             return fabsf(movement) >= minimum;
 		}
-        case JASidePanelRightVisible: {
+        case UBSlidingPanelRightVisible: {
             return movement >= minimum;
 		}
     }
