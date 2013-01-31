@@ -146,7 +146,7 @@ static char kvoContext;
             centerFrame.origin.x = CGRectGetWidth(self.leftPanelContainer.frame);
             break;
         case UBSlidingPanelRightVisible:
-            centerFrame.origin.x = 0.0f;
+            centerFrame.origin.x = (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) ? 0.0f : -kSidePanelWidth;
             break;
         default:
             break;
@@ -308,8 +308,6 @@ static char kvoContext;
     
     if ( self.centerPanelIsDragging) {
     
-//        CGPoint touchInMainView = [touch locationInView:self.view];
-                
         CGFloat maxOriginX = kSidePanelWidth;
         CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainer.frame) - kSidePanelWidth;
         
@@ -317,15 +315,23 @@ static char kvoContext;
         CGFloat newOriginX = CGRectGetMinX(self.centerPanelContainer.frame) + xMovementSinceStarted;
         
         // Constraints
-        CGFloat constrainedNewOriginX = fminf(newOriginX, maxOriginX);
-        constrainedNewOriginX = fmaxf(constrainedNewOriginX, minOriginX);
-
+        // Let's compute how far the drag is beyond the sidebar size. Then, we'll multiple that distance
+        // by a spring constant to give an elasticity to the drag that's beyond the boundary
+        CGFloat springValue = 0.1f;
+        CGFloat constrainedNewOriginX = newOriginX;
+        if ( constrainedNewOriginX > maxOriginX ) {
+            CGFloat amountBeyondMax = newOriginX - maxOriginX;
+            constrainedNewOriginX = maxOriginX + (springValue*amountBeyondMax);
+        }
+        else if ( constrainedNewOriginX < minOriginX ) {
+            CGFloat amountBeforeMin = minOriginX - newOriginX;
+            constrainedNewOriginX = minOriginX - (springValue*amountBeforeMin);
+        }
+        
         // Update the frame
         CGRect frame = self.centerPanelContainer.frame;
         frame.origin.x = constrainedNewOriginX;
         self.centerPanelContainer.frame = frame;
-
-        
     }
     else {
         [super touchesMoved:touches withEvent:event];
@@ -337,10 +343,50 @@ static char kvoContext;
 //
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if ( self.centerPanelIsDragging ) {
+        
+        //
+        [self positionCenterContainerForState:[self targetStateForCenterPanel] animated:YES];
+
+        // Reset Vars
+        self.dragTouchStart = CGPointZero;
+        self.centerPanelIsDragging = NO;
+    }
+    else {
+        
+    }
     [super touchesEnded:touches withEvent:event];
-    self.dragTouchStart = CGPointZero;
 }
 
+//
+// targetStateForCenterPanel
+// When we end dragging, we need to look at where the panel currently is,
+// and determine what state that corresponds to
+//
+- (UBSlidingPanelState)targetStateForCenterPanel
+{
+    CGFloat centerOriginX = CGRectGetMinX(self.centerPanelContainer.frame);
+    
+    if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ) {
+        if ( centerOriginX < (kSidePanelWidth/2) ) {
+            return UBSlidingPanelRightVisible;
+        }
+        else {
+            return UBSlidingPanelLeftVisible;
+        }
+    }
+    else {
+        if ( centerOriginX < -(kSidePanelWidth/2) ) {
+            return UBSlidingPanelRightVisible;
+        }
+        else if ( centerOriginX < (kSidePanelWidth/2) ) {
+            return UBSlidingPanelCenterOnly;
+        }
+        else {
+            return UBSlidingPanelLeftVisible;
+        }
+    }
+}
 
 #pragma mark - Pan Gestures
 
