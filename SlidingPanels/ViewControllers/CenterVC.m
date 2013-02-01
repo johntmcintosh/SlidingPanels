@@ -9,10 +9,16 @@
 #import "CenterVC.h"
 
 @interface CenterVC ()
-
+- (void)addMainButtonToMainView;
+- (void)addCenterLabelToMainView;
 @end
 
 @implementation CenterVC
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,33 +33,33 @@
 {
     [super viewDidLoad];
 
-//    CGFloat red = (CGFloat)arc4random() / 0x100000000;
-//    CGFloat green = (CGFloat)arc4random() / 0x100000000;
-//    CGFloat blue = (CGFloat)arc4random() / 0x100000000;
-//    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
     self.view.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-    
-    UILabel *label  = [[UILabel alloc] init];
-    label.font = [UIFont boldSystemFontOfSize:20.0f];
-    label.text = @"Center Panel";
-    [label sizeToFit];
-    label.center = CGPointMake(floorf(self.view.bounds.size.width/2.0f), floorf((self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)/2.0f));
-    label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-    [self.view addSubview:label];
-    
+    [self addCenterLabelToMainView];
+    [self addMainButtonToMainView];
+}
+
+
+- (void)addMainButtonToMainView
+{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     btn.frame = CGRectMake(10, 10, 100, 50);
     [btn setTitle:@"BTN" forState:UIControlStateNormal];
     [self.view addSubview:btn];
     [btn addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    self.mainButton = btn;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)addCenterLabelToMainView
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    UILabel *label  = [[UILabel alloc] init];
+    label.font = [UIFont boldSystemFontOfSize:20.0f];
+    label.text = @"Center Panel";
+    [label sizeToFit];
+    label.center = CGPointMake(floorf(self.view.bounds.size.width/2.0f),
+                               floorf((self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)/2.0f));
+    label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+    [self.view addSubview:label];
 }
-
 
 - (IBAction)btnPressed:(id)sender
 {

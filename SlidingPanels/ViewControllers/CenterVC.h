@@ -10,4 +10,6 @@
 
 @interface CenterVC : UIViewController
 
+@property(nonatomic, strong) UIButton *mainButton;
+
 @end

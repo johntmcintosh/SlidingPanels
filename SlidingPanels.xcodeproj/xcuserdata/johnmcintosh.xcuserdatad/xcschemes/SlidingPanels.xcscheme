@@ -28,6 +28,26 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E5D9C35C16BC842F00DAAEC1"
+               BuildableName = "ApplicationTests.octest"
+               BlueprintName = "ApplicationTests"
+               ReferencedContainer = "container:SlidingPanels.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E5327E7316BC89E200B3884E"
+               BuildableName = "UnitTests.octest"
+               BlueprintName = "UnitTests"
+               ReferencedContainer = "container:SlidingPanels.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
