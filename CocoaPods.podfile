@@ -1,0 +1,4 @@
+platform :ios, '6.0'
+
+pod 'KIF'
+pod 'Kiwi', '~>2.0.4'

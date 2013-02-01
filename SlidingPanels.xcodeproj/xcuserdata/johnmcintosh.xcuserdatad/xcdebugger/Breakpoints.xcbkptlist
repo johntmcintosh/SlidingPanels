@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381428808.02609"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "295"
-         endingLineNumber = "295"
+         startingLineNumber = "333"
+         endingLineNumber = "333"
          landmarkName = "-setCenterPanel:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381428808.02609"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "320"
-         endingLineNumber = "320"
+         startingLineNumber = "356"
+         endingLineNumber = "356"
          landmarkName = "-setLeftPanel:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381428808.02609"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "333"
-         endingLineNumber = "333"
+         startingLineNumber = "369"
+         endingLineNumber = "369"
          landmarkName = "-setRightPanel:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381358187.741243"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "102"
-         endingLineNumber = "102"
+         startingLineNumber = "86"
+         endingLineNumber = "86"
          landmarkName = "-viewWillAppear:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381358187.741243"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
+         startingLineNumber = "89"
+         endingLineNumber = "89"
          landmarkName = "-viewWillAppear:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381428808.02609"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "411"
-         endingLineNumber = "411"
+         startingLineNumber = "447"
+         endingLineNumber = "447"
          landmarkName = "-gestureRecognizerShouldBegin:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381358187.741243"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "93"
-         endingLineNumber = "93"
+         startingLineNumber = "77"
+         endingLineNumber = "77"
          landmarkName = "-viewWillAppear:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381358187.741243"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "76"
-         endingLineNumber = "76"
+         startingLineNumber = "60"
+         endingLineNumber = "60"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381428808.02609"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "401"
-         endingLineNumber = "401"
+         startingLineNumber = "437"
+         endingLineNumber = "437"
          landmarkName = "-gestureRecognizerShouldBegin:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381425859.215563"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "116"
-         endingLineNumber = "116"
+         startingLineNumber = "119"
+         endingLineNumber = "119"
          landmarkName = "-willAnimateRotationToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SlidingPanels/UBSlidingPanelController/UBSlidingPanelController.m"
-         timestampString = "381426121.958142"
+         timestampString = "381431483.760899"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "167"
-         endingLineNumber = "167"
+         startingLineNumber = "170"
+         endingLineNumber = "170"
          landmarkName = "-positionCenterContainerForState:interfaceOrientation:animated:"
          landmarkType = "5">
       </FileBreakpoint>
