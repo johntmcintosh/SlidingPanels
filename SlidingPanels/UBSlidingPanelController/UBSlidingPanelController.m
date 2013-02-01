@@ -90,6 +90,25 @@ static CGFloat kSidePanelPadding = 50.0f;
     [self addPanGestureToView:self.centerPanelContainer];
 }
 
+
+//
+// willRotateToInterfaceOrientation: duration:
+//
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    // Update panel position based on where rotation is going
+    if ( UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ) {
+        UBSlidingPanelState targetState = self.state;
+        if ( UBSlidingPanelCenterOnly == self.state ) {
+            targetState = UBSlidingPanelLeftVisible;
+        }
+        _state = targetState;
+    }
+
+}
+
 //
 // willAnimateRotationToInterfaceOrientation: duration:
 //
@@ -165,10 +184,14 @@ static CGFloat kSidePanelPadding = 50.0f;
             break;
     }
 
+    // viewWillAppear/Disappear notifications to children
+    
+    // Move the center panel
     CGFloat duration = (animated) ? 0.25 : 0.0;
     [UIView animateWithDuration:duration animations:^{
         self.centerPanelContainer.frame = centerFrame;
     } completion:^(BOOL finished) {
+        // viewDidAppear/Disappear notifications to children
         
     }];    
 }
@@ -198,6 +221,7 @@ static CGFloat kSidePanelPadding = 50.0f;
     }
     return nextState;
 }
+
 
 //
 // targetStateForCenterPanel
