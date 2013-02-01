@@ -17,29 +17,18 @@
 @property(nonatomic, assign) CGPoint dragTouchStart;
 @property(nonatomic, assign) BOOL centerPanelIsDragging;
 @property(nonatomic, assign) CGPoint initialCenterPanelOrigin;
-
-// the minimum % of total screen width the centerPanel.view must move for panGesture to succeed
-@property (nonatomic) CGFloat minimumMovePercentage;
-
-// the maximum time panel opening/closing should take. Actual time may be less if panGesture has already moved the view.
-@property (nonatomic) CGFloat maximumAnimationDuration;
-
-// how long the bounce animation should take
-@property (nonatomic) CGFloat bounceDuration;
-
-// how far the view should bounce
-@property (nonatomic) CGFloat bouncePercentage;
-
 @end
 
 static CGFloat kCenterPanelWidth = 768.0f;
 static CGFloat kSidePanelWidth = 1024.0f - 768.0f;
 static CGFloat kSidePanelPadding = 50.0f;
 
-//static char kvoContext;
 
 @implementation UBSlidingPanelController
 
+//
+// init
+//
 - (id)init
 {
     self = [super init];
@@ -51,11 +40,6 @@ static CGFloat kSidePanelPadding = 50.0f;
         self.allowLeftOverpan = NO;
         self.dragTouchStart = CGPointZero;
         self.centerPanelIsDragging = NO;
-        
-        self.minimumMovePercentage = 0.15f;
-        self.maximumAnimationDuration = 0.2f;
-        self.bounceDuration = 0.1f;
-        self.bouncePercentage = 0.075f;
     }
     return self;
 }
@@ -215,6 +199,37 @@ static CGFloat kSidePanelPadding = 50.0f;
     return nextState;
 }
 
+//
+// targetStateForCenterPanel
+// When we end dragging, we need to look at where the panel currently is,
+// and determine what state that corresponds to
+//
+- (UBSlidingPanelState)targetStateForCenterPanel
+{
+    CGFloat centerOriginX = CGRectGetMinX(self.centerPanelContainer.frame);
+    
+    if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ) {
+        if ( centerOriginX < (kSidePanelWidth/2) ) {
+            return UBSlidingPanelRightVisible;
+        }
+        else {
+            return UBSlidingPanelLeftVisible;
+        }
+    }
+    else {
+        if ( centerOriginX < -(kSidePanelWidth/2) ) {
+            return UBSlidingPanelRightVisible;
+        }
+        else if ( centerOriginX < (kSidePanelWidth/2) ) {
+            return UBSlidingPanelCenterOnly;
+        }
+        else {
+            return UBSlidingPanelLeftVisible;
+        }
+    }
+}
+
+
 
 #pragma mark - Panel Buttons
 
@@ -297,8 +312,6 @@ static CGFloat kSidePanelPadding = 50.0f;
         [_centerPanel removeObserver:self forKeyPath:@"view"];
         [_centerPanel removeObserver:self forKeyPath:@"viewControllers"];
         _centerPanel = centerPanel;
-//        [_centerPanel addObserver:self forKeyPath:@"viewControllers" options:0 context:&kvoContext];
-//        [_centerPanel addObserver:self forKeyPath:@"view" options:NSKeyValueObservingOptionInitial context:&kvoContext];
 
         // Add
         [self _removeChildVC:_centerPanel];
@@ -504,6 +517,7 @@ static CGFloat kSidePanelPadding = 50.0f;
     }
 }
 
+
 #pragma mark - Manual Touch Handling
 
 /*
@@ -587,36 +601,6 @@ static CGFloat kSidePanelPadding = 50.0f;
     [super touchesEnded:touches withEvent:event];
 }
 */
-
-//
-// targetStateForCenterPanel
-// When we end dragging, we need to look at where the panel currently is,
-// and determine what state that corresponds to
-//
-- (UBSlidingPanelState)targetStateForCenterPanel
-{
-    CGFloat centerOriginX = CGRectGetMinX(self.centerPanelContainer.frame);
-    
-    if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ) {
-        if ( centerOriginX < (kSidePanelWidth/2) ) {
-            return UBSlidingPanelRightVisible;
-        }
-        else {
-            return UBSlidingPanelLeftVisible;
-        }
-    }
-    else {
-        if ( centerOriginX < -(kSidePanelWidth/2) ) {
-            return UBSlidingPanelRightVisible;
-        }
-        else if ( centerOriginX < (kSidePanelWidth/2) ) {
-            return UBSlidingPanelCenterOnly;
-        }
-        else {
-            return UBSlidingPanelLeftVisible;
-        }
-    }
-}
 
 
 @end
