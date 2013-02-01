@@ -27,12 +27,12 @@
 	
 	self.viewController = [[UBSlidingPanelController alloc] init];
     
-    self.viewController.leftPanel = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.viewController.leftPanelVC = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
 //	self.viewController.leftPanel = [[LeftVC alloc] init];
-	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
+	self.viewController.centerPanelVC = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
 //	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[UITableViewController alloc] initWithStyle:UITableViewStylePlain]];
 //	self.viewController.centerPanel = [[ScrollVC alloc] init];
-	self.viewController.rightPanel = [[RightVC alloc] init];
+	self.viewController.rightPanelVC = [[RightVC alloc] init];
 	   
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];

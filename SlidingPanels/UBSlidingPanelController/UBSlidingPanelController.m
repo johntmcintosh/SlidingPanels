@@ -54,19 +54,19 @@ static CGFloat kSidePanelPadding = 50.0f;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     // Create container views
-    self.centerPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCenterPanelWidth, CGRectGetHeight(self.view.bounds))];
-    self.leftPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
-    self.rightPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
+    self.centerPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCenterPanelWidth, CGRectGetHeight(self.view.bounds))];
+    self.leftPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
+    self.rightPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
     [self configureContainers];
     
     // Accessibility
-    self.centerPanelContainer.accessibilityLabel = @"Center Panel";
+    self.centerPanelContainerView.accessibilityLabel = @"Center Panel";
     
     // Add as Subviews
-    [self.view addSubview:self.centerPanelContainer];
-    [self.view addSubview:self.leftPanelContainer];
-    [self.view addSubview:self.rightPanelContainer];
-    [self.view bringSubviewToFront:self.centerPanelContainer];
+    [self.view addSubview:self.centerPanelContainerView];
+    [self.view addSubview:self.leftPanelContainerView];
+    [self.view addSubview:self.rightPanelContainerView];
+    [self.view bringSubviewToFront:self.centerPanelContainerView];
 }
 
 //
@@ -77,20 +77,20 @@ static CGFloat kSidePanelPadding = 50.0f;
     [super viewWillAppear:animated];
 
     // Add Content
-    [self _addChildVC:self.leftPanel intoView:self.leftPanelContainer];
-    [self _addChildVC:self.rightPanel intoView:self.rightPanelContainer];
-    [self _addChildVC:self.centerPanel intoView:self.centerPanelContainer];
+    [self _addChildVC:self.leftPanelVC intoView:self.leftPanelContainerView];
+    [self _addChildVC:self.rightPanelVC intoView:self.rightPanelContainerView];
+    [self _addChildVC:self.centerPanelVC intoView:self.centerPanelContainerView];
     
     // Style
-    [self styleContainer:self.centerPanelContainer];
-    [self stylePanel:self.centerPanel.view];
+    [self styleContainer:self.centerPanelContainerView];
+    [self stylePanel:self.centerPanelVC.view];
     
     // Layout
     [self positionCenterContainerForState:self.state animated:NO];
     
     // Gestures
-    [self _addTapGestureToView:self.centerPanelContainer];
-    [self addPanGestureToView:self.centerPanelContainer];
+    [self _addTapGestureToView:self.centerPanelContainerView];
+    [self addPanGestureToView:self.centerPanelContainerView];
 }
 
 
@@ -152,9 +152,9 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 - (void)configureContainers
 {
-    self.leftPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
-    self.rightPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
-    self.centerPanelContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.leftPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+    self.rightPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
+    self.centerPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 }
 
 //
@@ -170,7 +170,7 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 - (void)positionCenterContainerForState:(UBSlidingPanelState)state interfaceOrientation:(UIInterfaceOrientation)orientation animated:(BOOL)animated
 {
-    CGRect centerFrame = self.centerPanelContainer.frame;
+    CGRect centerFrame = self.centerPanelContainerView.frame;
     
     switch (state) {
         case UBSlidingPanelCenterOnly:
@@ -192,7 +192,7 @@ static CGFloat kSidePanelPadding = 50.0f;
     // Move the center panel
     CGFloat duration = (animated) ? 0.25 : 0.0;
     [UIView animateWithDuration:duration animations:^{
-        self.centerPanelContainer.frame = centerFrame;
+        self.centerPanelContainerView.frame = centerFrame;
     } completion:^(BOOL finished) {
         // viewDidAppear/Disappear notifications to children
         
@@ -233,7 +233,7 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 - (UBSlidingPanelState)targetStateForCenterPanel
 {
-    CGFloat centerOriginX = CGRectGetMinX(self.centerPanelContainer.frame);
+    CGFloat centerOriginX = CGRectGetMinX(self.centerPanelContainerView.frame);
     
     if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ) {
         if ( centerOriginX < (kSidePanelWidth/2) ) {
@@ -265,8 +265,8 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 - (void)addTogglePanelsButton
 {
-    if (self.centerPanel) {
-        UIViewController *vcWithButton = self.centerPanel;
+    if (self.centerPanelVC) {
+        UIViewController *vcWithButton = self.centerPanelVC;
         
         // If navigation controller, go find the root VC
         if ([vcWithButton isKindOfClass:[UINavigationController class]]) {
@@ -333,19 +333,19 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 // setCenterPanel:
 //
-- (void)setCenterPanel:(UIViewController *)centerPanel {
+- (void)setCenterPanelVC:(UIViewController *)centerPanelVC {
 
-    if (centerPanel != _centerPanel) {
+    if (centerPanelVC != _centerPanelVC) {
         
         // Remove
-        [_centerPanel removeObserver:self forKeyPath:@"view"];
-        [_centerPanel removeObserver:self forKeyPath:@"viewControllers"];
-        _centerPanel = centerPanel;
+        [_centerPanelVC removeObserver:self forKeyPath:@"view"];
+        [_centerPanelVC removeObserver:self forKeyPath:@"viewControllers"];
+        _centerPanelVC = centerPanelVC;
 
         // Add
-        [self _removeChildVC:_centerPanel];
-        if (centerPanel) {
-            [self _addChildVC:centerPanel intoView:self.centerPanelContainer];
+        [self _removeChildVC:_centerPanelVC];
+        if (centerPanelVC) {
+            [self _addChildVC:centerPanelVC intoView:self.centerPanelContainerView];
         }
         
         // Bar Button
@@ -357,12 +357,12 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 // setLeftPanel:
 //
-- (void)setLeftPanel:(UIViewController *)leftPanel {
-    if (leftPanel != _leftPanel) {
-        [self _removeChildVC:_leftPanel];
-        _leftPanel = leftPanel;
-        if (_leftPanel) {
-            [self _addChildVC:leftPanel intoView:self.leftPanelContainer];
+- (void)setLeftPanelVC:(UIViewController *)leftPanelVC {
+    if (leftPanelVC != _leftPanelVC) {
+        [self _removeChildVC:_leftPanelVC];
+        _leftPanelVC = leftPanelVC;
+        if (_leftPanelVC) {
+            [self _addChildVC:leftPanelVC intoView:self.leftPanelContainerView];
         }
     }
 }
@@ -370,12 +370,12 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 // setRightPanel:
 //
-- (void)setRightPanel:(UIViewController *)rightPanel {
-    if (rightPanel != _rightPanel) {
-        [self _removeChildVC:_rightPanel];
-        _rightPanel = rightPanel;
-        if (_rightPanel) {
-            [self _addChildVC:rightPanel intoView:self.rightPanelContainer];
+- (void)setRightPanelVC:(UIViewController *)rightPanelVC {
+    if (rightPanelVC != _rightPanelVC) {
+        [self _removeChildVC:_rightPanelVC];
+        _rightPanelVC = rightPanelVC;
+        if (_rightPanelVC) {
+            [self _addChildVC:rightPanelVC intoView:self.rightPanelContainerView];
         }
     }
 }
@@ -451,9 +451,9 @@ static CGFloat kSidePanelPadding = 50.0f;
     // Make sure panning horizontally
     if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-        CGPoint translate = [pan translationInView:self.centerPanelContainer];
+        CGPoint translate = [pan translationInView:self.centerPanelContainerView];
         BOOL possible = translate.x != 0 && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
-        if (possible && ((translate.x > 0 && self.leftPanel) || (translate.x < 0 && self.rightPanel))) {
+        if (possible && ((translate.x > 0 && self.leftPanelVC) || (translate.x < 0 && self.rightPanelVC))) {
             return YES;
         }
     }
@@ -501,16 +501,16 @@ static CGFloat kSidePanelPadding = 50.0f;
 {
     // If pan beginning, record initial state
     if ( UIGestureRecognizerStateBegan == panRecognizer.state ) {        
-        self.initialCenterPanelOrigin = self.centerPanelContainer.frame.origin;
+        self.initialCenterPanelOrigin = self.centerPanelContainerView.frame.origin;
     }
 
     // Get the total movement since start of gesture
-    CGPoint point = [panRecognizer translationInView:self.centerPanelContainer];
+    CGPoint point = [panRecognizer translationInView:self.centerPanelContainerView];
     CGFloat xTotalMovement = point.x;
     
     // Compute constraints
     CGFloat maxOriginX = kSidePanelWidth;
-    CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainer.frame) - kSidePanelWidth;
+    CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainerView.frame) - kSidePanelWidth;
     
     CGFloat xMovementSinceStarted = xTotalMovement;
     CGFloat newOriginX = self.initialCenterPanelOrigin.x + xMovementSinceStarted;
@@ -530,9 +530,9 @@ static CGFloat kSidePanelPadding = 50.0f;
     }
     
     // Update the frame
-    CGRect frame = self.centerPanelContainer.frame;
+    CGRect frame = self.centerPanelContainerView.frame;
     frame.origin.x = constrainedNewOriginX;
-    self.centerPanelContainer.frame = frame;
+    self.centerPanelContainerView.frame = frame;
 
     
     // Check for ending states.

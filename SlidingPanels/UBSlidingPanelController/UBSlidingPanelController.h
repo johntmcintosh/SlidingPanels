@@ -17,14 +17,14 @@ typedef enum {
 @interface UBSlidingPanelController : UIViewController <UIGestureRecognizerDelegate>
 
 // View Controllers
-@property (nonatomic, strong) UIViewController *leftPanel;
-@property (nonatomic, strong) UIViewController *centerPanel;
-@property (nonatomic, strong) UIViewController *rightPanel; 
+@property (nonatomic, strong) UIViewController *leftPanelVC;
+@property (nonatomic, strong) UIViewController *centerPanelVC;
+@property (nonatomic, strong) UIViewController *rightPanelVC; 
 
 // Container Views
-@property (nonatomic, strong) UIView *leftPanelContainer;
-@property (nonatomic, strong) UIView *rightPanelContainer;
-@property (nonatomic, strong) UIView *centerPanelContainer;
+@property (nonatomic, strong) UIView *leftPanelContainerView;
+@property (nonatomic, strong) UIView *rightPanelContainerView;
+@property (nonatomic, strong) UIView *centerPanelContainerView;
 
 // Public properties
 @property(nonatomic, assign) UBSlidingPanelState state;
