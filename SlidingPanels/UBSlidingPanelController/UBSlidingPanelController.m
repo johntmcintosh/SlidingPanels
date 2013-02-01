@@ -36,7 +36,7 @@ static CGFloat kCenterPanelWidth = 768.0f;
 static CGFloat kSidePanelWidth = 1024.0f - 768.0f;
 static CGFloat kSidePanelPadding = 50.0f;
 
-static char kvoContext;
+//static char kvoContext;
 
 @implementation UBSlidingPanelController
 
@@ -180,11 +180,13 @@ static char kvoContext;
         default:
             break;
     }
-    
+
     CGFloat duration = (animated) ? 0.25 : 0.0;
     [UIView animateWithDuration:duration animations:^{
         self.centerPanelContainer.frame = centerFrame;
-    }];
+    } completion:^(BOOL finished) {
+        
+    }];    
 }
 
 
