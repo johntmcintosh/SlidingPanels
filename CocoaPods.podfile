@@ -1,4 +1,7 @@
 platform :ios, '6.0'
 
-pod 'KIF'
-pod 'Kiwi', '~>2.0.4'
+target :test, :exclusive => true do
+  link_with 'SlidingPanels KIF'
+  pod 'KIF'
+  pod 'Kiwi', '~>2.0.4'
+end

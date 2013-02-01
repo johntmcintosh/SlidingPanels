@@ -59,6 +59,9 @@ static CGFloat kSidePanelPadding = 50.0f;
     self.rightPanelContainer = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
     [self configureContainers];
     
+    // Accessibility
+    self.centerPanelContainer.accessibilityLabel = @"Center Panel";
+    
     // Add as Subviews
     [self.view addSubview:self.centerPanelContainer];
     [self.view addSubview:self.leftPanelContainer];
@@ -283,7 +286,9 @@ static CGFloat kSidePanelPadding = 50.0f;
 //
 - (UIBarButtonItem *)toggleBarButton
 {
-    return [[UIBarButtonItem alloc] initWithImage:[[self class] defaultImage] style:UIBarButtonItemStylePlain target:self action:@selector(toggleCenterPanel:)];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:[[self class] defaultImage] style:UIBarButtonItemStylePlain target:self action:@selector(toggleCenterPanel:)];
+    barButtonItem.accessibilityLabel = @"Toggle Center Panel";
+    return barButtonItem;
 }
 
 //

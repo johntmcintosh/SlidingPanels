@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>SlidingPanels copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>SlidingPanels.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>E50A77C216BC5A0500185E99</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>E59A056D16B9B5E800614619</key>
 		<dict>
 			<key>primary</key>
