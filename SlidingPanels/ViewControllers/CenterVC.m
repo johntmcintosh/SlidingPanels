@@ -40,6 +40,12 @@
     label.center = CGPointMake(floorf(self.view.bounds.size.width/2.0f), floorf((self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)/2.0f));
     label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:label];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    btn.frame = CGRectMake(10, 10, 100, 50);
+    [btn setTitle:@"BTN" forState:UIControlStateNormal];
+    [self.view addSubview:btn];
+    [btn addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,14 +55,10 @@
 }
 
 
-//
-// touchesBegan: withEvent:
-//
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (IBAction)btnPressed:(id)sender
 {
-    NSLog(@"TOUCHES BEGAN in VC");
-    [super touchesBegan:touches withEvent:event];
+    CenterVC *vc = [[CenterVC alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
-
 
 @end

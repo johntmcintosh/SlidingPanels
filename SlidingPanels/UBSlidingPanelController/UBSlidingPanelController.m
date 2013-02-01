@@ -107,6 +107,16 @@ static char kvoContext;
 }
 
 //
+// willAnimateRotationToInterfaceOrientation: duration:
+//
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    [self positionCenterContainerForState:self.state interfaceOrientation:toInterfaceOrientation animated:YES];
+}
+
+//
 // didReceiveMemoryWarning
 //
 - (void)didReceiveMemoryWarning
@@ -125,6 +135,8 @@ static char kvoContext;
 {
     _state = state;
     [self positionCenterContainerForState:state animated:YES];
+    
+    NSLog(@"state: %i", state);
 }
 
 #pragma mark - Private
@@ -144,18 +156,26 @@ static char kvoContext;
 //
 - (void)positionCenterContainerForState:(UBSlidingPanelState)state animated:(BOOL)animated
 {
+    [self positionCenterContainerForState:state interfaceOrientation:self.interfaceOrientation animated:animated];
+}
+
+//
+// positionCenterContainerForState: interfaceOrientation: animated:
+//
+- (void)positionCenterContainerForState:(UBSlidingPanelState)state interfaceOrientation:(UIInterfaceOrientation)orientation animated:(BOOL)animated
+{
     CGRect centerFrame = self.centerPanelContainer.frame;
     
     switch (state) {
         case UBSlidingPanelCenterOnly:
-            // CenterOnly will also show right panel in landscape
-            centerFrame.origin.x = 0.0f;
+            // CenterOnly will also show left panel in landscape
+            centerFrame.origin.x = (UIInterfaceOrientationIsLandscape(orientation)) ? kSidePanelWidth : 0.0f;
             break;
         case UBSlidingPanelLeftVisible:
             centerFrame.origin.x = kSidePanelWidth;
             break;
         case UBSlidingPanelRightVisible:
-            centerFrame.origin.x = (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) ? 0.0f : -kSidePanelWidth;
+            centerFrame.origin.x = (UIInterfaceOrientationIsLandscape(orientation)) ? 0.0f : -kSidePanelWidth;
             break;
         default:
             break;
@@ -168,6 +188,100 @@ static char kvoContext;
 }
 
 
+//
+// nextToggleState
+//
+- (UBSlidingPanelState)nextToggleState
+{
+    UBSlidingPanelState nextState;
+    UIInterfaceOrientation orientation = self.interfaceOrientation;
+    
+    switch (self.state) {
+        case UBSlidingPanelCenterOnly:
+            nextState = UBSlidingPanelLeftVisible;
+            break;
+        case UBSlidingPanelLeftVisible:
+            nextState = (UIInterfaceOrientationIsPortrait(orientation)) ? UBSlidingPanelCenterOnly : UBSlidingPanelRightVisible;
+            break;
+        case UBSlidingPanelRightVisible:
+            nextState = (UIInterfaceOrientationIsPortrait(orientation)) ? UBSlidingPanelCenterOnly : UBSlidingPanelLeftVisible;
+            break;
+        default:
+            nextState = UBSlidingPanelCenterOnly;
+            break;
+    }
+    return nextState;
+}
+
+
+#pragma mark - Panel Buttons
+
+//
+// addTogglePanelsButton
+//
+- (void)addTogglePanelsButton
+{
+    if (self.centerPanel) {
+        UIViewController *vcWithButton = self.centerPanel;
+        
+        // If navigation controller, go find the root VC
+        if ([vcWithButton isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navC = (UINavigationController *)vcWithButton;
+            if ([navC.viewControllers count] > 0) {
+                vcWithButton = [navC.viewControllers objectAtIndex:0];
+            }
+        }
+        if (!vcWithButton.navigationItem.leftBarButtonItem) {
+            vcWithButton.navigationItem.leftBarButtonItem = [self toggleBarButton];
+        }
+    }
+}
+
+//
+// toggleBarButton
+//
+- (UIBarButtonItem *)toggleBarButton
+{
+    return [[UIBarButtonItem alloc] initWithImage:[[self class] defaultImage] style:UIBarButtonItemStylePlain target:self action:@selector(toggleCenterPanel:)];
+}
+
+//
+// defaultImage
+// github.com/gotosleep/JASidePanels
+//
++ (UIImage *)defaultImage
+{
+	static UIImage *defaultImage = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		UIGraphicsBeginImageContextWithOptions(CGSizeMake(20.f, 13.f), NO, 0.0f);
+		
+		[[UIColor blackColor] setFill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 20, 1)] fill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 5, 20, 1)] fill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 10, 20, 1)] fill];
+		
+		[[UIColor whiteColor] setFill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 1, 20, 2)] fill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 6,  20, 2)] fill];
+		[[UIBezierPath bezierPathWithRect:CGRectMake(0, 11, 20, 2)] fill];
+		
+		defaultImage = UIGraphicsGetImageFromCurrentImageContext();
+		UIGraphicsEndImageContext();
+        
+	});
+    return defaultImage;
+}
+
+//
+// toggleCenterPanel:
+//
+- (IBAction)toggleCenterPanel:(id)sender
+{
+    self.state = [self nextToggleState];
+}
+
+
 #pragma mark - Panels
 
 //
@@ -176,19 +290,22 @@ static char kvoContext;
 - (void)setCenterPanel:(UIViewController *)centerPanel {
 
     if (centerPanel != _centerPanel) {
+        
+        // Remove
         [_centerPanel removeObserver:self forKeyPath:@"view"];
         [_centerPanel removeObserver:self forKeyPath:@"viewControllers"];
         _centerPanel = centerPanel;
 //        [_centerPanel addObserver:self forKeyPath:@"viewControllers" options:0 context:&kvoContext];
 //        [_centerPanel addObserver:self forKeyPath:@"view" options:NSKeyValueObservingOptionInitial context:&kvoContext];
-    }
 
-    if (centerPanel != _centerPanel) {
+        // Add
         [self _removeChildVC:_centerPanel];
         if (centerPanel) {
             [self _addChildVC:centerPanel intoView:self.centerPanelContainer];
         }
         
+        // Bar Button
+        [self addTogglePanelsButton];
     }
 }
 
@@ -276,8 +393,15 @@ static char kvoContext;
 //
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    // Tap to bring panel back to center
+    // We only want to fire this recognizer if we're in portrait with left or right visible
     if ( [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] ) {
-        return YES;
+        if ( UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ) {
+            if ( (UBSlidingPanelLeftVisible == self.state) ||
+                 (UBSlidingPanelRightVisible == self.state) ) {
+                return YES;
+            }
+        }
     }
     
     // Make sure panning horizontally
@@ -311,24 +435,7 @@ static char kvoContext;
 //
 - (void)_handleTap:(UITapGestureRecognizer *)tapRecognizer
 {
-    UBSlidingPanelState nextState;
-    
-    switch (self.state) {
-        case UBSlidingPanelCenterOnly:
-            nextState = UBSlidingPanelLeftVisible;
-            break;
-        case UBSlidingPanelLeftVisible:
-            nextState = UBSlidingPanelCenterOnly;
-            break;
-        case UBSlidingPanelRightVisible:
-            nextState = UBSlidingPanelCenterOnly;
-            break;
-        default:
-            nextState = UBSlidingPanelCenterOnly;
-            break;
-    }
-    
-    self.state = nextState;
+    self.state = [self nextToggleState];
 }
 
 //
@@ -387,7 +494,7 @@ static char kvoContext;
     // Check for ending states.
     // If just ended, compute new target position and animate there
     if ( UIGestureRecognizerStateEnded == panRecognizer.state ) {
-        [self positionCenterContainerForState:[self targetStateForCenterPanel] animated:YES];
+        self.state = [self targetStateForCenterPanel];
     }
     // If cancelled, reset position to original state
     else if (UIGestureRecognizerStateCancelled == panRecognizer.state ) {
