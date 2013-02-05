@@ -25,6 +25,7 @@ static CGFloat kSidePanelPadding = 50.0f;
 
 @implementation UBSlidingPanelController
 
+
 //
 // init
 //
@@ -36,10 +37,14 @@ static CGFloat kSidePanelPadding = 50.0f;
         // State
         self.state = UBSlidingPanelLeftVisible;
         self.panelSpringConstant = 0.05f;
+        
+        // Structure
+        [self createContainerViews];
+        [self addContainerViewsAsSubviews];
+
     }
     return self;
 }
-
 
 //
 // viewDidLoad
@@ -49,12 +54,14 @@ static CGFloat kSidePanelPadding = 50.0f;
     [super viewDidLoad];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    // Create container views
-    self.centerPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCenterPanelWidth, CGRectGetHeight(self.view.bounds))];
-    self.leftPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
-    self.rightPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
+    // Main Views
     [self configureContainers];
-    
+    [self styleContainer:self.centerPanelContainerView];
+
+    // Gestures
+    [self _addTapGestureToView:self.centerPanelContainerView];
+    [self addPanGestureToView:self.centerPanelContainerView];
+
     // Tap Overlay
     self.tapOverlayView = [[UIView alloc] initWithFrame:self.centerPanelContainerView.bounds];
     [self.centerPanelContainerView addSubview:self.tapOverlayView];
@@ -63,12 +70,6 @@ static CGFloat kSidePanelPadding = 50.0f;
     self.centerPanelContainerView.accessibilityLabel = @"Center Panel";
     self.leftPanelContainerView.accessibilityLabel = @"Left Panel";
     self.rightPanelContainerView.accessibilityLabel = @"Right Panel";
-    
-    // Add as Subviews
-    [self.view addSubview:self.centerPanelContainerView];
-    [self.view addSubview:self.leftPanelContainerView];
-    [self.view addSubview:self.rightPanelContainerView];
-    [self.view bringSubviewToFront:self.centerPanelContainerView];
 }
 
 //
@@ -77,26 +78,10 @@ static CGFloat kSidePanelPadding = 50.0f;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    // Add Content
-    [self _addChildVC:self.leftPanelVC intoView:self.leftPanelContainerView];
-    [self _addChildVC:self.rightPanelVC intoView:self.rightPanelContainerView];
-    [self _addChildVC:self.centerPanelVC intoView:self.centerPanelContainerView];
-    
-    // Zindex
-    [self.centerPanelContainerView bringSubviewToFront:self.tapOverlayView];
-
-    // Style
-    [self styleContainer:self.centerPanelContainerView];
-    [self stylePanel:self.centerPanelVC.view];
     
     // Layout
     [self positionCenterContainerForState:self.state animated:NO];
     [self configureTapOverlayViewForState:self.state];
-    
-    // Gestures
-    [self _addTapGestureToView:self.centerPanelContainerView];
-    [self addPanGestureToView:self.centerPanelContainerView];
 }
 
 
@@ -154,13 +139,40 @@ static CGFloat kSidePanelPadding = 50.0f;
     NSLog(@"state: %i", state);
 }
 
+
 #pragma mark - Private
+
+//
+// createContainerViews
+//
+- (void)createContainerViews
+{
+    // Create container views
+    self.centerPanelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.leftPanelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.rightPanelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+//
+// addContainerViewsAsSubviews
+//
+- (void)addContainerViewsAsSubviews
+{
+    [self.view addSubview:self.centerPanelContainerView];
+    [self.view addSubview:self.leftPanelContainerView];
+    [self.view addSubview:self.rightPanelContainerView];
+    [self.view bringSubviewToFront:self.centerPanelContainerView];
+}
 
 //
 // configureContainers
 //
 - (void)configureContainers
 {
+    self.centerPanelContainerView.frame = CGRectMake(0, 0, kCenterPanelWidth, CGRectGetHeight(self.view.bounds));
+    self.leftPanelContainerView.frame = CGRectMake(0, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds));
+    self.rightPanelContainerView.frame = CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds));
+
     self.leftPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
     self.rightPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
     self.centerPanelContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -384,6 +396,7 @@ static CGFloat kSidePanelPadding = 50.0f;
         if (centerPanelVC) {
             [self _addChildVC:centerPanelVC intoView:self.centerPanelContainerView];
             [self.centerPanelContainerView bringSubviewToFront:self.tapOverlayView];
+            [self stylePanel:centerPanelVC.view];
         }
         
         // Bar Button
