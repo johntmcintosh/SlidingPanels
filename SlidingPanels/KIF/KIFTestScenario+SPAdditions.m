@@ -20,8 +20,8 @@
     [scenario addStep:[KIFTestStep stepToInterfaceOrientation:UIInterfaceOrientationPortrait]];
     
     // Starts with left panel visible
-    // Toggle should put center panel in the middle
-    [scenario addStep:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"Toggle Center Panel"]];
+    // Tap center panel should put center panel in the middle
+    [scenario addStep:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"Center Panel Overlay"]];
     [scenario addStep:[KIFTestStep stepToWaitForTappableViewWithAccessibilityLabel:@"Center Panel"]];
     [scenario addStep:[KIFTestStep stepToWaitForAbsenceOfTappableViewWithAccessibilityLabel:@"Left Panel"]];
     [scenario addStep:[KIFTestStep stepToWaitForAbsenceOfTappableViewWithAccessibilityLabel:@"Right Panel"]];

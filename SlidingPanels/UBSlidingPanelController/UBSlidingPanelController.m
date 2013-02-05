@@ -64,6 +64,7 @@ static CGFloat kSidePanelPadding = 50.0f;
 
     // Tap Overlay
     self.tapOverlayView = [[UIView alloc] initWithFrame:self.centerPanelContainerView.bounds];
+    self.tapOverlayView.accessibilityLabel = @"Center Panel Overlay";
     [self.centerPanelContainerView addSubview:self.tapOverlayView];
     
     // Accessibility
