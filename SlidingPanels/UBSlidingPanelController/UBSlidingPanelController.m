@@ -17,6 +17,7 @@
 @property(nonatomic, assign) CGPoint dragTouchStart;
 @property(nonatomic, assign) BOOL centerPanelIsDragging;
 @property(nonatomic, assign) CGPoint initialCenterPanelOrigin;
+@property(nonatomic, strong) UIView *tapOverlayView;
 @end
 
 static CGFloat kCenterPanelWidth = 768.0f;
@@ -59,6 +60,10 @@ static CGFloat kSidePanelPadding = 50.0f;
     self.rightPanelContainerView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.bounds)-kSidePanelWidth-kSidePanelPadding, 0, kSidePanelWidth+kSidePanelPadding, CGRectGetHeight(self.view.bounds))];
     [self configureContainers];
     
+    // Tap Overlay
+    self.tapOverlayView = [[UIView alloc] initWithFrame:self.centerPanelContainerView.bounds];
+    [self.centerPanelContainerView addSubview:self.tapOverlayView];
+    
     // Accessibility
     self.centerPanelContainerView.accessibilityLabel = @"Center Panel";
     self.leftPanelContainerView.accessibilityLabel = @"Left Panel";
@@ -83,12 +88,16 @@ static CGFloat kSidePanelPadding = 50.0f;
     [self _addChildVC:self.rightPanelVC intoView:self.rightPanelContainerView];
     [self _addChildVC:self.centerPanelVC intoView:self.centerPanelContainerView];
     
+    // Zindex
+    [self.centerPanelContainerView bringSubviewToFront:self.tapOverlayView];
+
     // Style
     [self styleContainer:self.centerPanelContainerView];
     [self stylePanel:self.centerPanelVC.view];
     
     // Layout
     [self positionCenterContainerForState:self.state animated:NO];
+    [self configureTapOverlayViewForState:self.state];
     
     // Gestures
     [self _addTapGestureToView:self.centerPanelContainerView];
@@ -112,6 +121,8 @@ static CGFloat kSidePanelPadding = 50.0f;
         _state = targetState;
     }
 
+    // Tap overlay
+    [self configureTapOverlayViewForState:self.state orientation:toInterfaceOrientation];
 }
 
 //
@@ -143,6 +154,7 @@ static CGFloat kSidePanelPadding = 50.0f;
 {
     _state = state;
     [self positionCenterContainerForState:state animated:YES];
+    [self configureTapOverlayViewForState:state];
     
     NSLog(@"state: %i", state);
 }
@@ -199,6 +211,34 @@ static CGFloat kSidePanelPadding = 50.0f;
         // viewDidAppear/Disappear notifications to children
         
     }];    
+}
+
+//
+// configureTapOverlayViewForState:
+//
+- (void)configureTapOverlayViewForState:(UBSlidingPanelState)state
+{
+    [self configureTapOverlayViewForState:state orientation:self.interfaceOrientation];
+}
+
+//
+// configureTapOverlayViewForState: orientation:
+//
+- (void)configureTapOverlayViewForState:(UBSlidingPanelState)state orientation:(UIInterfaceOrientation)orientation
+{
+    switch (state) {
+        case UBSlidingPanelCenterOnly:
+            self.tapOverlayView.hidden = YES;
+            break;
+        case UBSlidingPanelLeftVisible:
+            self.tapOverlayView.hidden = (UIInterfaceOrientationIsLandscape(orientation)) ? YES : NO;
+            break;
+        case UBSlidingPanelRightVisible:
+            self.tapOverlayView.hidden = (UIInterfaceOrientationIsLandscape(orientation)) ? YES : NO;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -348,6 +388,7 @@ static CGFloat kSidePanelPadding = 50.0f;
         [self _removeChildVC:_centerPanelVC];
         if (centerPanelVC) {
             [self _addChildVC:centerPanelVC intoView:self.centerPanelContainerView];
+            [self.centerPanelContainerView bringSubviewToFront:self.tapOverlayView];
         }
         
         // Bar Button
