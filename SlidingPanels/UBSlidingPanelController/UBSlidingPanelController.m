@@ -12,13 +12,11 @@
 
 @interface UBSlidingPanelController ()
 @property(nonatomic, assign) CGPoint locationBeforePan;
-@property(nonatomic, assign) BOOL allowRightOverpan;
-@property(nonatomic, assign) BOOL allowLeftOverpan;
-@property(nonatomic, assign) CGPoint dragTouchStart;
-@property(nonatomic, assign) BOOL centerPanelIsDragging;
 @property(nonatomic, assign) CGPoint initialCenterPanelOrigin;
 @property(nonatomic, strong) UIView *tapOverlayView;
+@property(nonatomic, assign) CGFloat panelSpringConstant;
 @end
+
 
 static CGFloat kCenterPanelWidth = 768.0f;
 static CGFloat kSidePanelWidth = 1024.0f - 768.0f;
@@ -37,10 +35,7 @@ static CGFloat kSidePanelPadding = 50.0f;
         
         // State
         self.state = UBSlidingPanelLeftVisible;
-        self.allowRightOverpan = NO;
-        self.allowLeftOverpan = NO;
-        self.dragTouchStart = CGPointZero;
-        self.centerPanelIsDragging = NO;
+        self.panelSpringConstant = 0.05f;
     }
     return self;
 }
@@ -561,7 +556,7 @@ static CGFloat kSidePanelPadding = 50.0f;
     // Constraints
     // Let's compute how far the drag is beyond the sidebar size. Then, we'll multiple that distance
     // by a spring constant to give an elasticity to the drag that's beyond the boundary
-    CGFloat springValue = 0.05f;
+    CGFloat springValue = self.panelSpringConstant;
     CGFloat constrainedNewOriginX = newOriginX;
     if ( constrainedNewOriginX > maxOriginX ) {
         CGFloat amountBeyondMax = newOriginX - maxOriginX;
@@ -588,91 +583,5 @@ static CGFloat kSidePanelPadding = 50.0f;
         [self positionCenterContainerForState:self.state animated:YES];
     }
 }
-
-
-#pragma mark - Manual Touch Handling
-
-/*
-//
-// touchesBegan: withEvent:
-//
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"TOUCHES BEGAN in CONTAINER");
-    [super touchesBegan:touches withEvent:event];
-
-    UITouch *touch = touches.anyObject;
-    CGPoint point = [touch locationInView:self.centerPanelContainer];
-    
-    if ( CGRectContainsPoint(self.centerPanelContainer.bounds, point) ) {
-        self.centerPanelIsDragging = YES;
-        self.dragTouchStart = point;
-    }
-    else {
-        self.centerPanelIsDragging = NO;
-    }
-}
-
-//
-// touchesMoved: withEvent:
-//
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = touches.anyObject;
-    CGPoint pointInCenterPanel = [touch locationInView:self.centerPanelContainer];
-    
-    if ( self.centerPanelIsDragging) {
-    
-        CGFloat maxOriginX = kSidePanelWidth;
-        CGFloat minOriginX = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.centerPanelContainer.frame) - kSidePanelWidth;
-        
-        CGFloat xMovementSinceStarted = pointInCenterPanel.x - self.dragTouchStart.x;
-        CGFloat newOriginX = CGRectGetMinX(self.centerPanelContainer.frame) + xMovementSinceStarted;
-        
-        // Constraints
-        // Let's compute how far the drag is beyond the sidebar size. Then, we'll multiple that distance
-        // by a spring constant to give an elasticity to the drag that's beyond the boundary
-        CGFloat springValue = 0.05f;
-        CGFloat constrainedNewOriginX = newOriginX;
-        if ( constrainedNewOriginX > maxOriginX ) {
-            CGFloat amountBeyondMax = newOriginX - maxOriginX;
-            constrainedNewOriginX = maxOriginX + (springValue*amountBeyondMax);
-        }
-        else if ( constrainedNewOriginX < minOriginX ) {
-            CGFloat amountBeforeMin = minOriginX - newOriginX;
-            constrainedNewOriginX = minOriginX - (springValue*amountBeforeMin);
-        }
-        
-        // Update the frame
-        CGRect frame = self.centerPanelContainer.frame;
-        frame.origin.x = constrainedNewOriginX;
-        self.centerPanelContainer.frame = frame;
-    }
-    else {
-        [super touchesMoved:touches withEvent:event];
-    }
-}
-
-//
-// touchesEnded: withEvent:
-//
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if ( self.centerPanelIsDragging ) {
-        
-        //
-        [self positionCenterContainerForState:[self targetStateForCenterPanel] animated:YES];
-
-        // Reset Vars
-        self.dragTouchStart = CGPointZero;
-        self.centerPanelIsDragging = NO;
-    }
-    else {
-        
-    }
-    [super touchesEnded:touches withEvent:event];
-}
-*/
-
 
 @end
