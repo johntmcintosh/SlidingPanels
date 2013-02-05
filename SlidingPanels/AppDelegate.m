@@ -13,6 +13,7 @@
 #import "RightVC.h"
 #import "CenterVC.h"
 #import "ScrollVC.h"
+#import "LeftSidebarViewController.h"
 
 #if RUN_KIF_TESTS
 #import "SPKIFTestController.h"
@@ -27,11 +28,14 @@
 	
 	self.viewController = [[UBSlidingPanelController alloc] init];
     
-    self.viewController.leftPanelVC = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
-//	self.viewController.leftPanel = [[LeftVC alloc] init];
+//    self.viewController.leftPanelVC = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+//	self.viewController.leftPanelVC = [[LeftVC alloc] init];
+    self.viewController.leftPanelVC = [[LeftSidebarViewController alloc] init];
+    
 	self.viewController.centerPanelVC = [[UINavigationController alloc] initWithRootViewController:[[CenterVC alloc] init]];
 //	self.viewController.centerPanel = [[UINavigationController alloc] initWithRootViewController:[[UITableViewController alloc] initWithStyle:UITableViewStylePlain]];
 //	self.viewController.centerPanel = [[ScrollVC alloc] init];
+    
 	self.viewController.rightPanelVC = [[RightVC alloc] init];
 	   
 	self.window.rootViewController = self.viewController;

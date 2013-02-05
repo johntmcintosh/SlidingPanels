@@ -61,6 +61,8 @@ static CGFloat kSidePanelPadding = 50.0f;
     
     // Accessibility
     self.centerPanelContainerView.accessibilityLabel = @"Center Panel";
+    self.leftPanelContainerView.accessibilityLabel = @"Left Panel";
+    self.rightPanelContainerView.accessibilityLabel = @"Right Panel";
     
     // Add as Subviews
     [self.view addSubview:self.centerPanelContainerView];

@@ -64,6 +64,12 @@
 		E5D9C37816BC863C00DAAEC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A058116B9B5E800614619 /* AppDelegate.m */; };
 		E5D9C37916BC865600DAAEC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057516B9B5E800614619 /* CoreGraphics.framework */; };
 		E5D9C37A16BC865A00DAAEC1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A05A416B9BC2500614619 /* QuartzCore.framework */; };
+		E5EB01DA16C02887005B9689 /* LeftSidebarViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EB01D916C02887005B9689 /* LeftSidebarViewControllerTests.m */; };
+		E5EB01DD16C02900005B9689 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */; };
+		E5EB01DE16C02900005B9689 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */; };
+		E5EB01DF16C02900005B9689 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */; };
+		E5EB01E016C02900005B9689 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */; };
+		E5EB01E116C05384005B9689 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057516B9B5E800614619 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +139,9 @@
 		E5D9C36516BC842F00DAAEC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5D9C36A16BC842F00DAAEC1 /* ApplicationTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApplicationTests-Prefix.pch"; sourceTree = "<group>"; };
 		E5D9C37016BC850100DAAEC1 /* CenterPanelVCSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CenterPanelVCSpec.m; sourceTree = "<group>"; };
+		E5EB01D916C02887005B9689 /* LeftSidebarViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSidebarViewControllerTests.m; sourceTree = "<group>"; };
+		E5EB01DB16C02900005B9689 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSidebarViewController.h; sourceTree = "<group>"; };
+		E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSidebarViewController.m; sourceTree = "<group>"; };
 		FFFC9331D4EE433BAF24F65B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -153,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5EB01E116C05384005B9689 /* CoreGraphics.framework in Frameworks */,
 				E5327E7516BC89E200B3884E /* SenTestingKit.framework in Frameworks */,
 				E5327E7616BC89E200B3884E /* UIKit.framework in Frameworks */,
 				E5327E7716BC89E200B3884E /* Foundation.framework in Frameworks */,
@@ -205,6 +215,7 @@
 			children = (
 				E5327E7E16BC89E200B3884E /* UnitTests.h */,
 				E5327E7F16BC89E200B3884E /* UnitTests.m */,
+				E5EB01D916C02887005B9689 /* LeftSidebarViewControllerTests.m */,
 				E5327E7916BC89E200B3884E /* Supporting Files */,
 			);
 			path = UnitTests;
@@ -315,6 +326,8 @@
 				E59A05A016B9B7EF00614619 /* CenterVC.m */,
 				E50A77BF16BB0C0B00185E99 /* ScrollVC.h */,
 				E50A77C016BB0C0B00185E99 /* ScrollVC.m */,
+				E5EB01DB16C02900005B9689 /* LeftSidebarViewController.h */,
+				E5EB01DC16C02900005B9689 /* LeftSidebarViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -602,6 +615,7 @@
 				E50A77E716BC5CB500185E99 /* SPKIFTestController.m in Sources */,
 				E50A77EA16BC5D0300185E99 /* KIFTestScenario+SPAdditions.m in Sources */,
 				E50A77ED16BC5FE000185E99 /* KIFTestStep+SPAdditions.m in Sources */,
+				E5EB01DE16C02900005B9689 /* LeftSidebarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +624,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5327E8016BC89E200B3884E /* UnitTests.m in Sources */,
+				E5EB01DA16C02887005B9689 /* LeftSidebarViewControllerTests.m in Sources */,
+				E5EB01E016C02900005B9689 /* LeftSidebarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +641,7 @@
 				E59A05A216B9B7F000614619 /* CenterVC.m in Sources */,
 				E59A05A816B9C4F700614619 /* UBSlidingPanelController.m in Sources */,
 				E50A77C116BB0C0B00185E99 /* ScrollVC.m in Sources */,
+				E5EB01DD16C02900005B9689 /* LeftSidebarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,6 +657,7 @@
 				E5D9C37116BC850100DAAEC1 /* CenterPanelVCSpec.m in Sources */,
 				E5D9C37716BC863C00DAAEC1 /* ScrollVC.m in Sources */,
 				E5D9C37816BC863C00DAAEC1 /* AppDelegate.m in Sources */,
+				E5EB01DF16C02900005B9689 /* LeftSidebarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

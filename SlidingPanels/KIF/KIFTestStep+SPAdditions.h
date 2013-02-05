@@ -11,5 +11,9 @@
 @interface KIFTestStep (SPAdditions)
 
 + (KIFTestStep*)stepToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
+//+ (KIFTestStep *)stepToConfirmViewWithAccessibilityLabelIsTappable:(NSString *)accessibilityLabel;
+//+ (KIFTestStep *)stepToConfirmViewWithAccessibilityLabelIsNotTappable:(NSString *)accessibilityLabel;
+
++ (KIFTestStep *)stepToWaitForAbsenceOfTappableViewWithAccessibilityLabel:(NSString *)accessibilityLabel;
 
 @end
