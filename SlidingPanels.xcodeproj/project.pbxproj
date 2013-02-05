@@ -30,6 +30,8 @@
 		E50A77E716BC5CB500185E99 /* SPKIFTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = E50A77E616BC5CB500185E99 /* SPKIFTestController.m */; };
 		E50A77EA16BC5D0300185E99 /* KIFTestScenario+SPAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E50A77E916BC5D0300185E99 /* KIFTestScenario+SPAdditions.m */; };
 		E50A77ED16BC5FE000185E99 /* KIFTestStep+SPAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E50A77EC16BC5FE000185E99 /* KIFTestStep+SPAdditions.m */; };
+		E50F4FB816C1A38300A9D750 /* UBSlidingPanelControllerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = E50F4FB716C1A38300A9D750 /* UBSlidingPanelControllerSpec.m */; };
+		E50F4FB916C1C25D00A9D750 /* UBSlidingPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = E59A05A716B9C4F700614619 /* UBSlidingPanelController.m */; };
 		E5327E7516BC89E200B3884E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50A781116BC6E7D00185E99 /* SenTestingKit.framework */; };
 		E5327E7616BC89E200B3884E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057116B9B5E800614619 /* UIKit.framework */; };
 		E5327E7716BC89E200B3884E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E59A057316B9B5E800614619 /* Foundation.framework */; };
@@ -104,6 +106,7 @@
 		E50A77EC16BC5FE000185E99 /* KIFTestStep+SPAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KIFTestStep+SPAdditions.m"; sourceTree = "<group>"; };
 		E50A780716BC672A00185E99 /* SlidingPanels copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SlidingPanels copy2-Info.plist"; path = "/projects/development/_research/SlidingPanels/SlidingPanels copy2-Info.plist"; sourceTree = "<absolute>"; };
 		E50A781116BC6E7D00185E99 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		E50F4FB716C1A38300A9D750 /* UBSlidingPanelControllerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBSlidingPanelControllerSpec.m; sourceTree = "<group>"; };
 		E5327E7416BC89E200B3884E /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5327E7A16BC89E200B3884E /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		E5327E7C16BC89E200B3884E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -216,6 +219,7 @@
 				E5327E7E16BC89E200B3884E /* UnitTests.h */,
 				E5327E7F16BC89E200B3884E /* UnitTests.m */,
 				E5EB01D916C02887005B9689 /* LeftSidebarViewControllerTests.m */,
+				E50F4FB716C1A38300A9D750 /* UBSlidingPanelControllerSpec.m */,
 				E5327E7916BC89E200B3884E /* Supporting Files */,
 			);
 			path = UnitTests;
@@ -626,6 +630,8 @@
 				E5327E8016BC89E200B3884E /* UnitTests.m in Sources */,
 				E5EB01DA16C02887005B9689 /* LeftSidebarViewControllerTests.m in Sources */,
 				E5EB01E016C02900005B9689 /* LeftSidebarViewController.m in Sources */,
+				E50F4FB816C1A38300A9D750 /* UBSlidingPanelControllerSpec.m in Sources */,
+				E50F4FB916C1C25D00A9D750 /* UBSlidingPanelController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
